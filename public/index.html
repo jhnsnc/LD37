@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>TODO: Game Title</title>
+  <style type="text/css">
+  body {
+    margin: 0;
+  }
+  </style>
+  <!-- libraries -->
+  <script type="text/javascript" src="lib/phaser.js"></script><!-- TODO: swap with minified version -->
+  <script type="text/javascript" src="lib/lodash.min.js"></script>
+  <!-- game scripts -->
+  <script type="text/javascript" src="js/game.js"></script>
+</head>
+
+<body>
+  <script type="text/javascript">
+  //for Google WebFont Loader
+  WebFontConfig = {
+      google: {
+        families: []
+      }
+  };
+
+  (function() {
+    var game = new Phaser.Game(1080, 600, Phaser.AUTO, "game", {
+      create: init
+    }, false, false);
+
+    function init() {
+      game.state.add("Boot", bootState);
+      game.state.add("Preload", preloadState);
+      game.state.add("Title", titleState);
+      game.state.add("Intro", introState);
+      game.state.add("Play", playState);
+      game.state.add("Victory", victoryState);
+
+      game.state.start("Boot");
+    }
+  })();
+  </script>
+  <div id="no-js-warning" style="z-index: -10; position: absolute;">
+    <h1>Hey! You need to enable JavaScript in order to play this game.</h1>
+    <p>If you&rsquo;re still having trouble, you can <a href="mailto:jhnsn.c@gmail.com">send the developer a quick email</a>.</p>
+  </div>
+  <script type="text/javascript">
+  (function() {
+    setTimeout(function() {
+      document.getElementById('no-js-warning').remove();
+    }, 1);
+  })();
+  </script>
+</body>
+
+</html>
