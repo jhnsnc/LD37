@@ -41,6 +41,12 @@ var preloadState = function(game) {};
       // ui elements
       game.load.image("ui-FullscreenToggle", "assets/ui/ui-fullscreen-toggle.png");
 
+      // room
+      game.load.image("table", "assets/room/table.png");
+
+      // player
+      game.load.image("player", "assets/player/dude-guy.png");
+
       // music
       // game.load.audio("bgm", "assets/audio/music/bgm.mp3");
     },
@@ -50,7 +56,8 @@ var preloadState = function(game) {};
       this.game.time.events.add(Phaser.Timer.SECOND, this.launchTitle, this);
     },
     launchTitle: function() {
-      this.game.state.start("Title");
+      // this.game.state.start("Title");
+      this.game.state.start("Play"); //FOOBAR
     }
   };
 })();
