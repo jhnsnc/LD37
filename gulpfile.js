@@ -96,6 +96,8 @@ gulp.task('scripts', function () {
     config.jsSrcDir + '/states/misc/intro.js',
     config.jsSrcDir + '/states/misc/victory.js',
     config.jsSrcDir + '/states/main/play.js',
+    config.jsSrcDir + '/states/main/play-tables.js',
+    config.jsSrcDir + '/states/main/play-timing.js',
   ];
 
   return gulp.src(files)

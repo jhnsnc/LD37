@@ -42,7 +42,11 @@ var preloadState = function(game) {};
       game.load.image("ui-FullscreenToggle", "assets/ui/ui-fullscreen-toggle.png");
 
       // room
-      game.load.image("table", "assets/room/table.png");
+      game.load.image("table-empty", "assets/room/table-empty.png");
+      game.load.image("patron-a", "assets/room/table-a.png");
+      game.load.image("patron-b", "assets/room/table-b.png");
+      game.load.image("patron-c", "assets/room/table-c.png");
+      game.load.image("patron-d", "assets/room/table-d.png");
 
       // player
       game.load.image("player", "assets/player/dude-guy.png");
