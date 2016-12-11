@@ -62,8 +62,8 @@ var playState = function(game) {};
       createFullscreenToggle(this);
 
       // decode audio -- continue setup after decoded
-      // this.setupAudio();
-      this.startLevel();
+      this.setupAudio();
+      // this.startLevel(); gets called after decode
     },
     update: function(evt) {
       if (!this.isCompleting) {
@@ -150,7 +150,7 @@ var playState = function(game) {};
     // this.setupKeyboardInput();
 
     // music
-    // this.startAllMusic();
+    this.startMusic();
   };
 
   playState.prototype.completeLevel = function() {
@@ -162,7 +162,7 @@ var playState = function(game) {};
     var gfxCover;
 
     // fade music
-    this.fadeAllMusic(5000);
+    this.fadeMusic(5000);
 
     // fade in cover graphic (black)
     gfxCover = this.game.add.graphics(0, 0);

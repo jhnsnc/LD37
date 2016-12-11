@@ -54,7 +54,7 @@ var preloadState = function(game) {};
       game.load.spritesheet("player", "assets/player/waiter.png", 406, 514);
 
       // music
-      // game.load.audio("bgm", "assets/audio/music/bgm.mp3");
+      game.load.audio("bgm", "assets/audio/LD37-3b.mp3");
     },
     create: function() {
       console.log("Preloading game assets");

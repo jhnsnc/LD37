@@ -21,7 +21,7 @@ playState.prototype.setupTables = function() {
     // progress indicators
     table.indicators = this.game.add.sprite(0, 0);
     table.patienceFill = new Phaser.Graphics(this.game, 0, -20);
-    table.patienceFill.beginFill(0x6666ff, 1.0);
+    table.patienceFill.beginFill(0xff1133, 1.0);
     table.patienceFill.drawRect(-60, 27, 120, 10);
     table.patienceFill.endFill();
     table.patienceFill.anchor.setTo(0.0, 0.5);

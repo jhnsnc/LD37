@@ -98,6 +98,7 @@ gulp.task('scripts', function () {
     config.jsSrcDir + '/states/main/play.js',
     config.jsSrcDir + '/states/main/play-tables.js',
     config.jsSrcDir + '/states/main/play-timing.js',
+    config.jsSrcDir + '/states/main/play-audio.js',
   ];
 
   return gulp.src(files)
