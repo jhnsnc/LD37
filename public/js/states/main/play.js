@@ -34,9 +34,9 @@ var playState = function(game) {};
       // timers
       this.startTime = this.game.time.now;
       this.setupTimingIndicators();
-      this.nextPatronEntrance = this.getNewPatronEntranceTime();
 
       // start with 2 patrons
+      this.nextPatronEntrance = this.getNewPatronEntranceTime();
       this.addNewPatron();
       this.addNewPatron();
 
@@ -63,17 +63,19 @@ var playState = function(game) {};
         // handle input
         this.player.body.velocity.x = 0;
         if (this.cursors.left.isDown) {
-          this.player.body.velocity.x = -1 * PLAYER_VELOCITY;
+          this.player.body.velocity.x = -1 * PLAYER_SPEED;
         } else if (this.cursors.right.isDown) {
-          this.player.body.velocity.x = PLAYER_VELOCITY;
+          this.player.body.velocity.x = PLAYER_SPEED;
         }
 
         this.player.body.velocity.y = 0;
         if (this.cursors.up.isDown) {
-          this.player.body.velocity.y = -1 * PLAYER_VELOCITY;
+          this.player.body.velocity.y = -1 * PLAYER_SPEED;
         } else if (this.cursors.down.isDown) {
-          this.player.body.velocity.y = PLAYER_VELOCITY;
+          this.player.body.velocity.y = PLAYER_SPEED;
         }
+
+        this.updateResourceIndicators();
 
         // collision
         this.game.physics.arcade.collide(this.player, this.tables);
@@ -83,7 +85,6 @@ var playState = function(game) {};
 
         // new patrons
         if (this.game.time.now > this.nextPatronEntrance) {
-          console.log(this.game.time.now, this.nextPatronEntrance);
           this.nextPatronEntrance = this.getNewPatronEntranceTime();
           this.addNewPatron();
         }

@@ -8,7 +8,10 @@ var DEG_TO_RAD = Math.PI / 180;
 var SHOW_DEBUG = false;
 // var SHOW_DEBUG = true;
 
-var PLAYER_VELOCITY = 300;
+var PLAYER_SPEED = 300;
+
+var PATIENCE_DRAIN_MULTIPLIER = 0.002;
+var EATING_SPEED_MULTIPLIER = 0.002;
 
 var PATRONS = [
   {
