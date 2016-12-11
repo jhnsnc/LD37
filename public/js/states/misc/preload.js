@@ -44,14 +44,14 @@ var preloadState = function(game) {};
       game.load.image("ui-hunger-indicator", "assets/ui/indicator-hunger.png");
 
       // room
-      game.load.image("table-empty", "assets/room/table-empty.png");
-      game.load.image("patron-a", "assets/room/table-a.png");
-      game.load.image("patron-b", "assets/room/table-b.png");
-      game.load.image("patron-c", "assets/room/table-c.png");
-      game.load.image("patron-d", "assets/room/table-d.png");
+      game.load.spritesheet("table-empty", "assets/room/table-empty.png", 413, 316);
+      game.load.spritesheet("patron-a", "assets/room/table-a.png", 413, 316);
+      game.load.spritesheet("patron-b", "assets/room/table-b.png", 413, 316);
+      game.load.spritesheet("patron-c", "assets/room/table-c.png", 413, 316);
+      game.load.spritesheet("patron-d", "assets/room/table-d.png", 413, 316);
 
       // player
-      game.load.image("player", "assets/player/dude-guy.png");
+      game.load.spritesheet("player", "assets/player/waiter.png", 406, 514);
 
       // music
       // game.load.audio("bgm", "assets/audio/music/bgm.mp3");

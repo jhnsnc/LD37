@@ -8,6 +8,11 @@ var playState = function(game) {};
 
       this.isCompleting = false;
 
+      this.bg = this.game.add.graphics(0, 0);
+      this.bg.beginFill(0x334477, 1.0);
+      this.bg.drawRect(0, 0, 1080, 600);
+      this.bg.endFill();
+
       // set up objects
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
       this.room = this.game.add.group();
@@ -22,8 +27,14 @@ var playState = function(game) {};
       this.player = this.room.create(125, 300, "player");
       this.player.anchor.setTo(0.5,0.5);
       this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
-      this.player.body.setSize(70, 50, 30, 80);
+      this.player.body.setSize(PLAYER_BODY.w, PLAYER_BODY.h, PLAYER_BODY.x, PLAYER_BODY.y);
       this.player.body.collideWorldBounds = true;
+      this.player.animations.add('down', [0], 60, true);
+      this.player.animations.add('up', [1], 60, true);
+      this.player.animations.add('side', [2], 60, true);
+      this.player.direction = 'down';
+      this.player.animations.play('down');
+      this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
 
       // depth sorting
       this.room.sort('y');
@@ -61,18 +72,41 @@ var playState = function(game) {};
         this.updateTimers();
 
         // handle input
-        this.player.body.velocity.x = 0;
-        if (this.cursors.left.isDown) {
-          this.player.body.velocity.x = -1 * PLAYER_SPEED;
-        } else if (this.cursors.right.isDown) {
-          this.player.body.velocity.x = PLAYER_SPEED;
-        }
-
+        var newDirection;
         this.player.body.velocity.y = 0;
         if (this.cursors.up.isDown) {
           this.player.body.velocity.y = -1 * PLAYER_SPEED;
+          newDirection = 'up';
         } else if (this.cursors.down.isDown) {
           this.player.body.velocity.y = PLAYER_SPEED;
+          newDirection = 'down';
+        }
+        this.player.body.velocity.x = 0;
+        if (this.cursors.left.isDown) {
+          this.player.body.velocity.x = -1 * PLAYER_SPEED;
+          newDirection = 'left';
+        } else if (this.cursors.right.isDown) {
+          this.player.body.velocity.x = PLAYER_SPEED;
+          newDirection = 'right';
+        }
+
+        if (this.player.direction !== newDirection) {
+          this.player.direction = newDirection;
+          switch (newDirection) {
+            case 'up':
+            case 'down':
+              this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
+              this.player.animations.play(newDirection);
+              break;
+            case 'left':
+              this.player.scale.setTo(-PLAYER_SCALE, PLAYER_SCALE);
+              this.player.animations.play('side');
+              break;
+            case 'right':
+              this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
+              this.player.animations.play('side');
+              break;
+          }
         }
 
         this.updateResourceIndicators();

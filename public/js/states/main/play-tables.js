@@ -6,10 +6,14 @@ playState.prototype.setupTables = function() {
   var getTable = (function(x, y) {
     var table = this.room.create(x, y);
     var emptySprite = this.game.add.sprite(0, 0, "table-empty");
-    emptySprite.anchor.setTo(0.5, 0.2);
+    emptySprite.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
+    emptySprite.animations.add('empty', [0], 60, true);
+    emptySprite.animations.add('food', [1], 60, true);
+    emptySprite.animations.play('empty');
+    emptySprite.scale.setTo(TABLE_SCALE, TABLE_SCALE);
     table.emptySprite = emptySprite;
     table.addChild(emptySprite);
-    table.body.setSize(170, 70, -85, -35);
+    table.body.setSize(TABLE_BODY.w, TABLE_BODY.h, TABLE_BODY.x, TABLE_BODY.y);
     table.body.immovable = true;
     table.isOccupied = false;
     table.patronContainer = new Phaser.Sprite(this.game, 0, 0);
@@ -84,7 +88,11 @@ playState.prototype.addNewPatron = function() {
 
     // patron sprite
     emptyTable.patronSprite = this.game.add.sprite(0, 0, patronData.sprite);
-    emptyTable.patronSprite.anchor.setTo(0.5, 0.2);
+    emptyTable.patronSprite.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
+    emptyTable.patronSprite.animations.add('empty', [0], 60, true);
+    emptyTable.patronSprite.animations.add('food', [1], 60, true);
+    emptyTable.patronSprite.animations.play('empty');
+    emptyTable.patronSprite.scale.setTo(TABLE_SCALE, TABLE_SCALE);
     emptyTable.patronSprite.alpha = 0.0;
     emptyTable.patronContainer.addChild(emptyTable.patronSprite);
 

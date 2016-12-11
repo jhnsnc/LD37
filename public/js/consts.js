@@ -9,6 +9,25 @@ var SHOW_DEBUG = false;
 // var SHOW_DEBUG = true;
 
 var PLAYER_SPEED = 300;
+var PLAYER_SCALE = 0.4;
+var PLAYER_BODY = {
+  x: 137,
+  y: 269,
+  w: 130,
+  h: 80
+};
+
+var TABLE_SCALE = 0.4;
+var TABLE_BODY = {
+  x: -95,
+  y: -35,
+  w: 190,
+  h: 80
+};
+var TABLE_ANCHOR = {
+  x: 0.5,
+  y: 0.2
+};
 
 var PATIENCE_DRAIN_MULTIPLIER = 0.002;
 var EATING_SPEED_MULTIPLIER = 0.002;
