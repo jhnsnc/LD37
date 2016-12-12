@@ -8,14 +8,29 @@ var playState = function(game) {};
 
       this.isCompleting = false;
 
-      this.bg = this.game.add.graphics(0, 0);
-      this.bg.beginFill(0x334477, 1.0);
-      this.bg.drawRect(0, 0, 1080, 600);
-      this.bg.endFill();
+      this.bg = this.game.add.sprite(0, 0, "background");
 
       // set up objects
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.room = this.game.add.group();
+
+      // obstacles
+      var obstacle;
+      this.obstacles = this.game.add.group();
+      this.obstacles.enableBody = true;
+      this.obstacles.physicsBodyType = Phaser.Physics.ARCADE;
+      this.obstacleList = [];
+      obstacle = this.obstacles.create(0, 0);
+      obstacle.body.setSize(1080, 170, 0, 0);
+      obstacle.body.immovable = true;
+      this.obstacleList.push(obstacle);
+      obstacle = this.obstacles.create(0, 0);
+      obstacle.body.setSize(110, 120, 0, 150);
+      obstacle.body.immovable = true;
+      this.obstacleList.push(obstacle);
+      obstacle = this.obstacles.create(0, 0);
+      obstacle.body.setSize(130, 55, 950, 150);
+      obstacle.body.immovable = true;
+      this.obstacleList.push(obstacle);
 
       // tables
       this.room = this.game.add.group();
@@ -23,18 +38,14 @@ var playState = function(game) {};
       this.room.physicsBodyType = Phaser.Physics.ARCADE;
       this.tables = this.setupTables();
 
+      // counter
+      this.counter = this.room.create(1035, 360, "counter");
+      this.counter.anchor.setTo(0.5, 0.07);
+      this.counter.body.setSize(95, 260, 0, 0);
+      this.counter.body.immovable = true;
+
       // player
-      this.player = this.room.create(125, 300, "player");
-      this.player.anchor.setTo(0.5,0.5);
-      this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
-      this.player.body.setSize(PLAYER_BODY.w, PLAYER_BODY.h, PLAYER_BODY.x, PLAYER_BODY.y);
-      this.player.body.collideWorldBounds = true;
-      this.player.animations.add('down', [0], 60, true);
-      this.player.animations.add('up', [1], 60, true);
-      this.player.animations.add('side', [2], 60, true);
-      this.player.direction = 'down';
-      this.player.animations.play('down');
-      this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
+      this.setupPlayer();
 
       // depth sorting
       this.room.sort('y');
@@ -42,6 +53,18 @@ var playState = function(game) {};
       // setup input
       this.cursors = this.game.input.keyboard.createCursorKeys();
       this.setupInteractionPrompt();
+
+      this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+        .onDown.add(function() {
+          if (this.interactionTarget) {
+            this.triggerInteraction();
+          }
+        }, this);
+
+      // points
+      this.cashEarned = 0;
+      this.setupCashEmitter();
+      this.setupPointsIndicators();
 
       // timers
       this.startTime = this.game.time.now;
@@ -71,6 +94,7 @@ var playState = function(game) {};
         // tick update
 
         this.updateTimers();
+        this.updatePointsIndicators();
 
         // handle input
         var newDirection;
@@ -97,45 +121,33 @@ var playState = function(game) {};
         }
 
         if (this.player.direction !== newDirection) {
-          this.player.direction = newDirection;
-          switch (newDirection) {
-            case 'up':
-            case 'down':
-              this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
-              this.player.animations.play(newDirection);
-              break;
-            case 'left':
-              this.player.scale.setTo(-PLAYER_SCALE, PLAYER_SCALE);
-              this.player.animations.play('side');
-              break;
-            case 'right':
-              this.player.scale.setTo(PLAYER_SCALE, PLAYER_SCALE);
-              this.player.animations.play('side');
-              break;
-          }
+          this.updatePlayerDirection(newDirection);
         }
 
         this.updateResourceIndicators();
 
         // collision
-        var interactionItem;
+        var interactionItem, interactionType;
         this.game.physics.arcade.collide(this.player, this.tables, (function(player, table) {
           interactionItem = table;
+          interactionType = "table";
+        }).bind(this));
+        this.game.physics.arcade.collide(this.player, this.obstacles);
+        this.game.physics.arcade.collide(this.player, this.counter, (function(player, counter) {
+          interactionItem = counter;
+          interactionType = "counter";
         }).bind(this));
 
+        // interaction targets
         if (interactionItem) {
           if (interactionItem !== this.interactionTarget) {
-            this.showInteractionPrompt(interactionItem);
+            this.showInteractionPrompt(interactionItem, interactionType);
           }
         } else {
           if (playerMoved && this.interactionTarget &&
             distanceBetweenBodies(this.player.body, this.interactionTarget.body) > INTERACTION_TETHER_DISTANCE) {
             this.hideInteractionPrompt();
           }
-        }
-
-        if (this.interactionTarget && this.game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR)) {
-          this.feedTable(this.interactionTarget);
         }
 
         // depth
@@ -154,6 +166,10 @@ var playState = function(game) {};
         this.tables.forEach((function(table) {
           this.game.debug.body(table);
         }).bind(this));
+        this.obstacleList.forEach((function(obstacle) {
+          this.game.debug.body(obstacle);
+        }).bind(this));
+        this.game.debug.body(this.counter);
       }
     }
   };

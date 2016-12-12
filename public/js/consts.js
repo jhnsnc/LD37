@@ -6,15 +6,13 @@ var HALF_PI = Math.PI / 2;
 var DEG_TO_RAD = Math.PI / 180;
 
 var PLAYER_SPEED = 300;
-var PLAYER_SCALE = 0.4;
 var PLAYER_BODY = {
-  x: 137,
-  y: 269,
-  w: 130,
-  h: 80
+  x: 62,
+  y: 107,
+  w: 52,
+  h: 32
 };
 
-var TABLE_SCALE = 0.4;
 var TABLE_BODY = {
   x: -95,
   y: -35,
@@ -26,10 +24,12 @@ var TABLE_ANCHOR = {
   y: 0.2
 };
 
-var INTERACTION_TETHER_DISTANCE = 10;
+var INTERACTION_TETHER_DISTANCE = 15;
 
 var PATIENCE_DRAIN_MULTIPLIER = 0.002;
 var EATING_SPEED_MULTIPLIER = 0.002;
+
+var CASH_INDICATOR_LIFESPAN = 600;
 
 var PATRONS = [
   {

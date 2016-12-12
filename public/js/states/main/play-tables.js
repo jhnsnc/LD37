@@ -1,6 +1,6 @@
 playState.prototype.setupTables = function() {
-  var xMin = 250; var yMin = 100; // position
-  var xScale = 320; var yScale = 300; // spacing
+  var xMin = 230; var yMin = 200; // position
+  var xScale = 310; var yScale = 300; // spacing
 
   var arrTables = [];
   var getTable = (function(x, y, id) {
@@ -8,10 +8,6 @@ playState.prototype.setupTables = function() {
     table.id = id;
     var emptySprite = this.game.add.sprite(0, 0, "table-empty");
     emptySprite.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
-    emptySprite.animations.add('empty', [0], 60, true);
-    emptySprite.animations.add('food', [1], 60, true);
-    emptySprite.animations.play('empty');
-    emptySprite.scale.setTo(TABLE_SCALE, TABLE_SCALE);
     table.emptySprite = emptySprite;
     table.addChild(emptySprite);
     table.body.setSize(TABLE_BODY.w, TABLE_BODY.h, TABLE_BODY.x, TABLE_BODY.y);
@@ -19,10 +15,18 @@ playState.prototype.setupTables = function() {
     table.isOccupied = false;
     table.patronContainer = new Phaser.Sprite(this.game, 0, 0);
     table.addChild(table.patronContainer);
+    // table food
+    table.tableFood = this.game.add.sprite(0, 0, "table-food");
+    table.tableFood.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
+    table.tableFood.animations.add('empty', [0], 60, true);
+    table.tableFood.animations.add('eating', [1], 60, true);
+    table.tableFood.animations.add('finished', [2], 60, true);
+    table.tableFood.animations.play('empty');
+    table.addChild(table.tableFood);
     // progress indicators
     table.indicators = this.game.add.sprite(0, 0);
     table.patienceFill = new Phaser.Graphics(this.game, 0, -20);
-    table.patienceFill.beginFill(0xff1133, 1.0);
+    table.patienceFill.beginFill(0xffcc16, 1.0);
     table.patienceFill.drawRect(-60, 27, 120, 10);
     table.patienceFill.endFill();
     table.patienceFill.anchor.setTo(0.0, 0.5);
@@ -53,6 +57,7 @@ playState.prototype.setupTables = function() {
     table.addChild(table.indicators);
     table.indicators.alpha = 0.0;
     table.isServed = false;
+    table.isClear = true;
     // done
     return table;
   }).bind(this);
@@ -60,11 +65,11 @@ playState.prototype.setupTables = function() {
   arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 0.0 * yScale,0));
   arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 0.0 * yScale,1));
   arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 0.0 * yScale,2));
-  arrTables.push(getTable(xMin + 0.5 * xScale,yMin + 0.5 * yScale,3));
-  arrTables.push(getTable(xMin + 1.5 * xScale,yMin + 0.5 * yScale,4));
-  arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 1.0 * yScale,5));
-  arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 1.0 * yScale,6));
-  arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 1.0 * yScale,7));
+  arrTables.push(getTable(xMin + 0.5 * xScale - 25,yMin + 0.5 * yScale,3));
+  arrTables.push(getTable(xMin + 1.5 * xScale - 25,yMin + 0.5 * yScale,4));
+  arrTables.push(getTable(xMin + 0.0 * xScale - 50,yMin + 1.0 * yScale,5));
+  arrTables.push(getTable(xMin + 1.0 * xScale - 50,yMin + 1.0 * yScale,6));
+  arrTables.push(getTable(xMin + 2.0 * xScale - 50,yMin + 1.0 * yScale,7));
 
   return arrTables;
 };
@@ -91,12 +96,10 @@ playState.prototype.addNewPatron = function() {
     // patron sprite
     emptyTable.patronSprite = this.game.add.sprite(0, 0, patronData.sprite);
     emptyTable.patronSprite.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
-    emptyTable.patronSprite.animations.add('empty', [0], 60, true);
-    emptyTable.patronSprite.animations.add('food', [1], 60, true);
-    emptyTable.patronSprite.animations.play('empty');
-    emptyTable.patronSprite.scale.setTo(TABLE_SCALE, TABLE_SCALE);
     emptyTable.patronSprite.alpha = 0.0;
     emptyTable.patronContainer.addChild(emptyTable.patronSprite);
+
+    emptyTable.tableFood.animations.play('empty');
 
     // crossfade in
     this.game.add.tween(emptyTable.patronSprite)
@@ -120,20 +123,36 @@ playState.prototype.addNewPatron = function() {
 };
 
 playState.prototype.feedTable = function(table) {
-  if (table.isOccupied && !table.isServed) {
+  if (table.isOccupied && !table.isServed && this.waiterHasFood) {
     console.log("Feeding patron at table "+table.id+".");
 
+    this.waiterHasFood = false;
+    this.updatePlayerDirection();
+
     table.isServed = true;
+    table.isClear = false;
     table.eating = 0;
 
-    table.emptySprite.animations.play('food')
-    table.patronSprite.animations.play('food');
+    table.tableFood.animations.play('eating');
 
     // crossfade in
     this.game.add.tween(table.patienceFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(table.patienceIcon).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(table.eatingFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(table.eatingIcon).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+  }
+};
+
+playState.prototype.clearTable = function(table) {
+  if (!table.isOccupied && !table.isClear && !this.waiterHasFood && !this.waiterHasTrash) {
+    console.log("Clearing trash from table "+table.id+".");
+
+    this.waiterHasTrash = true;
+    this.updatePlayerDirection();
+
+    table.isClear = true;
+
+    table.tableFood.animations.play('empty');
   }
 };
 
@@ -157,7 +176,20 @@ playState.prototype.vacateTable = function(table, leavingHappy) {
   table.patronSprite = null;
   table.patronName = null;
 
-  // TODO: if happy, player earns table.billAmount
+  if (leavingHappy) {
+    this.cashEarned += table.billAmount;
+    table.tableFood.animations.play('finished');
+
+    this.emitCashBurst(table.x, table.y);
+  }
+};
+
+playState.prototype.interactWithTable = function(targetTable) {
+  if (targetTable.isOccupied) {
+    this.feedTable(targetTable);
+  } else {
+    this.clearTable(targetTable);
+  }
 };
 
 playState.prototype.updateResourceIndicators = function() {
@@ -203,7 +235,7 @@ playState.prototype.getRandomEmptyTable = function() {
 
   while(hash.length) {
     i = hash.shift();
-    if (!this.tables[i].isOccupied) {
+    if (!this.tables[i].isOccupied && this.tables[i].isClear) {
       return this.tables[i];
     }
   }
