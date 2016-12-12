@@ -41,6 +41,7 @@ var playState = function(game) {};
 
       // setup input
       this.cursors = this.game.input.keyboard.createCursorKeys();
+      this.setupInteractionPrompt();
 
       // timers
       this.startTime = this.game.time.now;
@@ -73,20 +74,25 @@ var playState = function(game) {};
 
         // handle input
         var newDirection;
+        var playerMoved = false;
         this.player.body.velocity.y = 0;
         if (this.cursors.up.isDown) {
           this.player.body.velocity.y = -1 * PLAYER_SPEED;
+          playerMoved = true;
           newDirection = 'up';
         } else if (this.cursors.down.isDown) {
           this.player.body.velocity.y = PLAYER_SPEED;
+          playerMoved = true;
           newDirection = 'down';
         }
         this.player.body.velocity.x = 0;
         if (this.cursors.left.isDown) {
           this.player.body.velocity.x = -1 * PLAYER_SPEED;
+          playerMoved = true;
           newDirection = 'left';
         } else if (this.cursors.right.isDown) {
           this.player.body.velocity.x = PLAYER_SPEED;
+          playerMoved = true;
           newDirection = 'right';
         }
 
@@ -112,7 +118,25 @@ var playState = function(game) {};
         this.updateResourceIndicators();
 
         // collision
-        this.game.physics.arcade.collide(this.player, this.tables);
+        var interactionItem;
+        this.game.physics.arcade.collide(this.player, this.tables, (function(player, table) {
+          interactionItem = table;
+        }).bind(this));
+
+        if (interactionItem) {
+          if (interactionItem !== this.interactionTarget) {
+            this.showInteractionPrompt(interactionItem);
+          }
+        } else {
+          if (playerMoved && this.interactionTarget &&
+            distanceBetweenBodies(this.player.body, this.interactionTarget.body) > INTERACTION_TETHER_DISTANCE) {
+            this.hideInteractionPrompt();
+          }
+        }
+
+        if (this.interactionTarget && this.game.input.keyboard.isDown(Phaser.KeyCode.SPACEBAR)) {
+          this.feedTable(this.interactionTarget);
+        }
 
         // depth
         this.room.sort('y');
@@ -125,7 +149,7 @@ var playState = function(game) {};
       }
     },
     render: function() {
-      if (SHOW_DEBUG) {
+      if (urlParams.debug === 'true') {
         this.game.debug.body(this.player);
         this.tables.forEach((function(table) {
           this.game.debug.body(table);

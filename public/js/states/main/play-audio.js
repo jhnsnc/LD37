@@ -13,7 +13,9 @@ playState.prototype.setupAudio = function() {
 playState.prototype.startMusic = function() {
   this.bgm.play(undefined, 0, MIN_VOLUME, true);
 
-  this.bgm.fadeTo(MUSIC_FADE_TIME, VOLUME);
+  this.bgm.fadeTo(MUSIC_FADE_TIME,
+    (urlParams.volume && !isNaN(urlParams.volume)) ? parseFloat(urlParams.volume) : VOLUME
+  );
 };
 
 playState.prototype.fadeMusic = function(fadeOutTime) {

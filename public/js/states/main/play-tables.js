@@ -3,8 +3,9 @@ playState.prototype.setupTables = function() {
   var xScale = 320; var yScale = 300; // spacing
 
   var arrTables = [];
-  var getTable = (function(x, y) {
+  var getTable = (function(x, y, id) {
     var table = this.room.create(x, y);
+    table.id = id;
     var emptySprite = this.game.add.sprite(0, 0, "table-empty");
     emptySprite.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
     emptySprite.animations.add('empty', [0], 60, true);
@@ -30,7 +31,7 @@ playState.prototype.setupTables = function() {
     // table.patienceOutline.lineStyle(4.0, 0xffffff, 1.0);
     // table.patienceOutline.drawRect(-60, 27, 120, 20);
     // table.indicators.addChild(table.patienceOutline);
-    table.patienceIcon = new Phaser.Sprite(this.game, 0, -10, "ui-patience-indicator");
+    table.patienceIcon = new Phaser.Sprite(this.game, -50, -10, "ui-patience-indicator");
     table.patienceIcon.anchor.setTo(0.5, 0.5);
     table.indicators.addChild(table.patienceIcon);
     table.eatingFill = new Phaser.Graphics(this.game, 0, -20);
@@ -45,7 +46,7 @@ playState.prototype.setupTables = function() {
     // table.eatingOutline.drawRect(-60, 27, 120, 20);
     // table.eatingOutline.alpha = 0.0;
     // table.indicators.addChild(table.eatingOutline);
-    table.eatingIcon = new Phaser.Sprite(this.game, 0, -10, "ui-hunger-indicator");
+    table.eatingIcon = new Phaser.Sprite(this.game, -50, -10, "ui-hunger-indicator");
     table.eatingIcon.anchor.setTo(0.5, 0.5);
     table.eatingIcon.alpha = 0.0;
     table.indicators.addChild(table.eatingIcon);
@@ -56,14 +57,14 @@ playState.prototype.setupTables = function() {
     return table;
   }).bind(this);
 
-  arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 0.0 * yScale));
-  arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 0.0 * yScale));
-  arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 0.0 * yScale));
-  arrTables.push(getTable(xMin + 0.5 * xScale,yMin + 0.5 * yScale));
-  arrTables.push(getTable(xMin + 1.5 * xScale,yMin + 0.5 * yScale));
-  arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 1.0 * yScale));
-  arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 1.0 * yScale));
-  arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 1.0 * yScale));
+  arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 0.0 * yScale,0));
+  arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 0.0 * yScale,1));
+  arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 0.0 * yScale,2));
+  arrTables.push(getTable(xMin + 0.5 * xScale,yMin + 0.5 * yScale,3));
+  arrTables.push(getTable(xMin + 1.5 * xScale,yMin + 0.5 * yScale,4));
+  arrTables.push(getTable(xMin + 0.0 * xScale,yMin + 1.0 * yScale,5));
+  arrTables.push(getTable(xMin + 1.0 * xScale,yMin + 1.0 * yScale,6));
+  arrTables.push(getTable(xMin + 2.0 * xScale,yMin + 1.0 * yScale,7));
 
   return arrTables;
 };
@@ -79,6 +80,7 @@ playState.prototype.addNewPatron = function() {
     }
     // patron attributes
     var patronData = this.getRandomPatronData();
+    emptyTable.patronName = patronData.name;
     emptyTable.billAmount = patronData.billAmount;
     emptyTable.patienceDrainSpeed = patronData.patienceDrainSpeed;
     emptyTable.eatingSpeed = patronData.eatingSpeed;
@@ -104,24 +106,79 @@ playState.prototype.addNewPatron = function() {
     this.game.add.tween(emptyTable.indicators)
       .to({
         alpha: 1.0
-      }, 1000, Phaser.Easing.Sinusoidal.InOut, true);
+      }, 1000, Phaser.Easing.Sinusoidal.InOut, true, 500);
+    this.game.add.tween(emptyTable.patienceFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(emptyTable.patienceIcon).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(emptyTable.eatingFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(emptyTable.eatingIcon).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
 
-    console.log("Adding new patron: "+patronData.name);
+    console.log("Adding new patron: "+emptyTable.patronName+" at table "+emptyTable.id);
     console.log("Next patron at: "+this.nextPatronEntrance);
   } else {
     console.log("No empty tables. Trying again at: "+this.nextPatronEntrance);
   }
 };
 
+playState.prototype.feedTable = function(table) {
+  if (table.isOccupied && !table.isServed) {
+    console.log("Feeding patron at table "+table.id+".");
+
+    table.isServed = true;
+    table.eating = 0;
+
+    table.emptySprite.animations.play('food')
+    table.patronSprite.animations.play('food');
+
+    // crossfade in
+    this.game.add.tween(table.patienceFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(table.patienceIcon).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(table.eatingFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+    this.game.add.tween(table.eatingIcon).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
+  }
+};
+
+playState.prototype.vacateTable = function(table, leavingHappy) {
+  console.log("Patron ("+table.patronName+") leaving table "+table.id+" "+(leavingHappy?"happy and satisfied":"in frustration")+".");
+
+  // crossfade in
+  this.game.add.tween(table.patronSprite)
+    .to({
+      alpha: 0.0
+    }, 1000, Phaser.Easing.Sinusoidal.InOut, true)
+    .onComplete.add(function(oldPatronSprite) {
+      oldPatronSprite.destroy();
+    }, this);
+  this.game.add.tween(table.indicators)
+    .to({
+      alpha: 0.0
+    }, 1000, Phaser.Easing.Sinusoidal.InOut, true);
+
+  table.isOccupied = false;
+  table.patronSprite = null;
+  table.patronName = null;
+
+  // TODO: if happy, player earns table.billAmount
+};
+
 playState.prototype.updateResourceIndicators = function() {
   this.tables.forEach((function(table) {
     if (table.isOccupied) {
       if (!table.isServed) {
-        table.patience = Math.max(0, table.patience - (table.patienceDrainSpeed * PATIENCE_DRAIN_MULTIPLIER));
-        table.patienceFill.scale.setTo(table.patience / 100, 1.0);
+        table.patience = table.patience - (table.patienceDrainSpeed * PATIENCE_DRAIN_MULTIPLIER);
+        //leave when patience runs out
+        if (table.patience < 0) {
+          this.vacateTable(table, false);
+        } else {
+          table.patienceFill.scale.setTo(table.patience / 100, 1.0);
+        }
       } else {
-        table.eating = Math.min(100, table.eating - (table.eatingSpeed * EATING_SPEED_MULTIPLIER));
-        table.eatingFill.scale.setTo(table.eating / 100, 1.0);
+        table.eating = table.eating + (table.eatingSpeed * EATING_SPEED_MULTIPLIER);
+        if (table.eating > 100) {
+          table.eatingFill.scale.setTo(1.0, 1.0);
+          this.vacateTable(table, true);
+        } else {
+          table.eatingFill.scale.setTo(table.eating / 100, 1.0);
+        }
       }
     }
   }).bind(this));

@@ -42,6 +42,7 @@ var preloadState = function(game) {};
       game.load.image("ui-FullscreenToggle", "assets/ui/ui-fullscreen-toggle.png");
       game.load.image("ui-patience-indicator", "assets/ui/indicator-patience.png");
       game.load.image("ui-hunger-indicator", "assets/ui/indicator-hunger.png");
+      game.load.image("ui-interaction-prompt", "assets/ui/interaction-prompt.png");
 
       // room
       game.load.spritesheet("table-empty", "assets/room/table-empty.png", 413, 316);
