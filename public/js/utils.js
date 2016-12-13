@@ -2,8 +2,8 @@ var createGameText = function(options, ctx) {
   var result;
   var defaults = {
     fill: '#ffffff',
-    stroke: '#8888ff',
-    strokeThickness: 5,
+    stroke: '#60635d',
+    strokeThickness: 3,
     fontSize: 30
   };
 
@@ -13,7 +13,7 @@ var createGameText = function(options, ctx) {
     stroke: options.stroke,
     strokeThickness: options.strokeThickness
   });
-  result.font = 'FONTFAMILY';
+  result.font = 'Montserrat, HelveticaNeue, Helvetica, sans-serif';
   result.fontSize = options.fontSize;
 
   return result;

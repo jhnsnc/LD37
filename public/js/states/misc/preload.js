@@ -6,7 +6,23 @@ var preloadState = function(game) {};
       var game = this.game;
 
       // Load the Google WebFont Loader script
-      game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+      this.fontReady = false;
+      game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js', function() {
+        WebFont.load({
+          google: {
+            families: ['Droid Sans', 'Droid Serif']
+          },
+          active: (function() {
+            this.fontReady = true;
+            if (this.startAfterFonts) {
+              console.log("Font ready and preloading complete. Launching.");
+              his.game.time.events.add(2 * Phaser.Timer.SECOND, this.launchTitle, this);
+            } else {
+              console.log("Font ready and but not preloading. Wait.");
+            }
+          }).bind(this)
+        });
+      }, this);
 
       //////////////////////////////
       // show loading indicator
@@ -45,6 +61,10 @@ var preloadState = function(game) {};
       game.load.image("ui-hunger-indicator", "assets/ui/indicator-hunger.png");
       game.load.image("ui-interaction-prompt", "assets/ui/interaction-prompt.png");
       game.load.image("cash-icon", "assets/ui/cash-icon.png");
+      game.load.image("tray-icon", "assets/ui/tray-icon.png");
+      game.load.image("keys-wasd", "assets/ui/keys-wasd.png");
+      game.load.image("keys-arrows", "assets/ui/keys-arrows.png");
+      game.load.image("keys-spacebar", "assets/ui/keys-spacebar.png");
 
       // room
       game.load.image("background", "assets/room/background.jpg");
@@ -61,15 +81,31 @@ var preloadState = function(game) {};
 
       // music
       game.load.audio("bgm", "assets/audio/LD37-3b.mp3");
+
+      // level
+      if (urlParams.level && !isNaN(urlParams.level)) {
+        this.game.level = Math.max(1, parseInt(urlParams.level, 10));
+      } else {
+        this.game.level = 1;
+      }
     },
     create: function() {
       console.log("Preloading game assets");
 
-      this.game.time.events.add(Phaser.Timer.SECOND, this.launchTitle, this);
+      if (this.fontReady) {
+        console.log("Preloading done and font ready. Launch.");
+        this.game.time.events.add(2 * Phaser.Timer.SECOND, this.launchTitle, this);
+      } else {
+        console.log("Preloading done but no fonts. Wait.");
+        this.startAfterFonts = true;
+      }
     },
     launchTitle: function() {
-      // this.game.state.start("Title");
-      this.game.state.start("Play"); //FOOBAR
+      if (urlParams.skipIntro === 'true') {
+        this.game.state.start("Play");
+      } else {
+        this.game.state.start("Title");
+      }
     }
   };
 })();

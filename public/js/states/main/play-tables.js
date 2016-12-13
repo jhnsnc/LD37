@@ -178,6 +178,7 @@ playState.prototype.vacateTable = function(table, leavingHappy) {
 
   if (leavingHappy) {
     this.cashEarned += table.billAmount;
+    this.updatePointsIndicators();
     table.tableFood.animations.play('finished');
 
     this.emitCashBurst(table.x, table.y);

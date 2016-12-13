@@ -82,6 +82,11 @@ var playState = function(game) {};
       this.introCover.endFill();
       this.introCover.alpha = 1.0;
 
+      this.timeLimit = (100 + 20 * this.game.level) * 1000;
+      if (urlParams.timeLimit && !isNaN(urlParams.timeLimit)) {
+        this.timeLimit = parseInt(urlParams.timeLimit, 10);
+      }
+
       // fullscreen toggle
       createFullscreenToggle(this);
 
@@ -94,7 +99,7 @@ var playState = function(game) {};
         // tick update
 
         this.updateTimers();
-        this.updatePointsIndicators();
+        // this.updatePointsIndicators();
 
         // handle input
         var newDirection;
@@ -158,6 +163,8 @@ var playState = function(game) {};
           this.nextPatronEntrance = this.getNewPatronEntranceTime();
           this.addNewPatron();
         }
+
+        this.checkEndCondition();
       }
     },
     render: function() {
@@ -197,6 +204,10 @@ var playState = function(game) {};
     console.log('Boom! Done. Finishing level');
 
     this.isCompleting = true;
+    this.game.timeLimit = Math.floor(this.timeLimit / 1000);
+    this.game.score = this.cashEarned;
+    this.game.goal = this.pointsTarget;
+    this.game.levelWasSuccess = this.cashEarned >= this.pointsTarget;
 
     var self = this;
     var gfxCover;

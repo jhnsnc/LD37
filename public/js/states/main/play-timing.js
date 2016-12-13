@@ -1,25 +1,37 @@
 playState.prototype.setupTimingIndicators = function() {
   this.timePreLabel = createGameText({
-    x: 60, y: 40, text: 'Time: ',
-    fontSize: 30, strokeThickness: 8
+    x: 170, y: 40, text: 'Time',
+    fontSize: 30, strokeThickness: 4
   }, this);
-  this.timePreLabel.fontWeight = 300;
-  this.timePreLabel.anchor.setTo(0.0, 0.5);
-  var timeMs = '' + ((this.game.time.now - this.startTime) / 1000);
-  timeMs = timeMs.slice(0, timeMs.indexOf('.') + 2);
+  this.timePreLabel.fontWeight = 400;
+  this.timePreLabel.anchor.setTo(1.0, 0.5);
   this.timeLabel = createGameText({
-    x: 60 + this.timePreLabel.width, y: 40,
-    text: timeMs,
-    fontSize: 30, strokeThickness: 8
+    x: 170, y: 40,
+    text: '0',
+    fontSize: 30, strokeThickness: 4
   }, this);
-  this.timeLabel.fontWeight = 300;
+  this.timeLabel.fontWeight = 400;
   this.timeLabel.anchor.setTo(0.0, 0.5);
+  this.game.time.events.add(0.5 * Phaser.Timer.SECOND, function() {
+    this.timePreLabel.text = "Time: ";
+  }, this);
 };
 
 playState.prototype.updateTimers = function() {
-  var timeMs = '' + ((this.game.time.now - this.startTime) / 1000);
-  timeMs = timeMs.slice(0, timeMs.indexOf('.') + 2);
+  var timeMs = '' + Math.max(0.0, (this.timeLimit - (this.game.time.now - this.startTime)) / 1000);
+  var i = timeMs.indexOf('.');
+  if (i === -1) {
+    timeMs += '.0';
+  } else {
+    timeMs = timeMs.slice(0, i + 2);
+  }
   this.timeLabel.text = timeMs;
+};
+
+playState.prototype.checkEndCondition = function() {
+  if ((this.game.time.now - this.startTime) > this.timeLimit) {
+    this.completeLevel();
+  }
 };
 
 playState.prototype.getNewPatronEntranceTime = function() {
