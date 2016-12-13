@@ -28,16 +28,17 @@ var introState = function(game) {};
       text = 'All your waiters bailed on their shift, so now you have to cover the whole dining room!';
       txtParagraph = createGameText({
         x: 140, y: 135, text: text,
-        fontSize: 24, strokeThickness: 0
+        fontSize: 20, strokeThickness: 0
       }, this);
       txtParagraph.wordWrap = true;
       txtParagraph.wordWrapWidth = 800;
       this.displayElements.add(txtParagraph);
 
-      text = 'Make sure patrons get their food and flip enough tables so you can earn enough before the end of the night.';
+      text = 'Pick up food from the kitchen counter on the right and deliver it before customers lose their patience. \n'+
+      'You also need to clear tables before new guests can arrive. \nDrop off trash or unneeded food at the counter on the right.';
       txtParagraph = createGameText({
-        x: 140, y: 230, text: text,
-        fontSize: 24, strokeThickness: 0
+        x: 140, y: 210, text: text,
+        fontSize: 20, strokeThickness: 0
       }, this);
       txtParagraph.wordWrap = true;
       txtParagraph.wordWrapWidth = 800;
@@ -60,39 +61,39 @@ var introState = function(game) {};
       this.displayElements.add(txtParagraph);
 
       var keys;
-      keys = this.game.add.sprite(210, 430, "keys-arrows");
+      keys = this.game.add.sprite(210, 450, "keys-arrows");
       keys.anchor.setTo(0.5, 1.0);
       this.displayElements.add(keys);
-      keys = this.game.add.sprite(380, 430, "keys-wasd");
+      keys = this.game.add.sprite(380, 450, "keys-wasd");
       keys.anchor.setTo(0.5, 1.0);
       this.displayElements.add(keys);
       text = "move";
       txtParagraph = createGameText({
-        x: 295, y: 438, text: text,
+        x: 295, y: 450+8, text: text,
         fontSize: 20, strokeThickness: 0
       }, this);
       txtParagraph.anchor.setTo(0.5, 0.0);
       this.displayElements.add(txtParagraph);
-      keys = this.game.add.sprite(630, 430, "keys-spacebar");
+      keys = this.game.add.sprite(630, 450, "keys-spacebar");
       keys.anchor.setTo(0.5, 1.0);
       this.displayElements.add(keys);
       text = "pick up / drop off";
       txtParagraph = createGameText({
-        x: 630, y: 438, text: text,
+        x: 630, y: 450+8, text: text,
         fontSize: 20, strokeThickness: 0
       }, this);
       txtParagraph.anchor.setTo(0.5, 0.0);
       this.displayElements.add(txtParagraph);
 
       //start game button
-      btnStartGameIcon = this.game.add.sprite(870, 430, "tray-icon");
+      btnStartGameIcon = this.game.add.sprite(870, 450, "tray-icon");
       this.displayElements.add(btnStartGameIcon);
       btnStartGameIcon.inputEnabled = true;
       btnStartGameIcon.input.useHandCursor = true;
       btnStartGameIcon.anchor.setTo(0.5, 1.0);
       btnStartGameIcon.events.onInputDown.add(this.beginGamePlay, this);
       btnStartGame = createGameText({
-        x: 870, y: 430, text: 'begin',
+        x: 870, y: 450, text: 'begin',
         fontSize: 32, strokeThickness: 0, fill: '#ffffff'
       }, this);
       this.displayElements.add(btnStartGame);
