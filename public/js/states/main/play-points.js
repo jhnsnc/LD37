@@ -6,7 +6,7 @@ playState.prototype.setupPointsIndicators = function() {
   }, this);
   this.pointsLabel.fontWeight = 400;
   this.pointsLabel.anchor.setTo(1.0, 0.5);
-  this.pointsTarget = 225 + (this.game.level * 125);
+  this.pointsTarget = 75 + (this.game.level * 125);
   this.pointsTargetLabel = createGameText({
     x: 880, y: 40, text: ' / $X',
     fontSize: 30, fill: '#82db3b',

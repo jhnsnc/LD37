@@ -19,12 +19,11 @@ var titleState = function(game) {};
 
       //title
       txtTitle = createGameText({
-        x: 540, y: 170, text: 'GAME NAME',
+        x: 540, y: 170, text: 'DINING ZOOM',
         fontSize: 120, fill: '#e34341',
         strokeThickness: 6, stroke: '#fcefa4'
       }, this);
       txtTitle.anchor.setTo(0.5, 0.5);
-      txtTitle.font = 'Montserrat';
       txtTitle.fontWeight = 700;
       this.displayElements.add(txtTitle);
 
