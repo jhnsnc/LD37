@@ -17,7 +17,7 @@ playState.prototype.setupTables = function() {
     table.addChild(table.patronContainer);
     // table food
     table.tableFood = this.game.add.sprite(0, 0, "table-food");
-    table.tableFood.anchor.setTo(TABLE_ANCHOR.x, TABLE_ANCHOR.y);
+    table.tableFood.anchor.setTo(0.5, 0.2);
     table.tableFood.animations.add('empty', [0], 60, true);
     table.tableFood.animations.add('eating', [1], 60, true);
     table.tableFood.animations.add('finished', [2], 60, true);
@@ -35,9 +35,6 @@ playState.prototype.setupTables = function() {
     // table.patienceOutline.lineStyle(4.0, 0xffffff, 1.0);
     // table.patienceOutline.drawRect(-60, 27, 120, 20);
     // table.indicators.addChild(table.patienceOutline);
-    table.patienceIcon = new Phaser.Sprite(this.game, -50, -10, "ui-patience-indicator");
-    table.patienceIcon.anchor.setTo(0.5, 0.5);
-    table.indicators.addChild(table.patienceIcon);
     table.eatingFill = new Phaser.Graphics(this.game, 0, -20);
     table.eatingFill.beginFill(0x66ff66, 1.0);
     table.eatingFill.drawRect(-60, 27, 120, 10);
@@ -50,10 +47,6 @@ playState.prototype.setupTables = function() {
     // table.eatingOutline.drawRect(-60, 27, 120, 20);
     // table.eatingOutline.alpha = 0.0;
     // table.indicators.addChild(table.eatingOutline);
-    table.eatingIcon = new Phaser.Sprite(this.game, -50, -10, "ui-hunger-indicator");
-    table.eatingIcon.anchor.setTo(0.5, 0.5);
-    table.eatingIcon.alpha = 0.0;
-    table.indicators.addChild(table.eatingIcon);
     table.addChild(table.indicators);
     table.indicators.alpha = 0.0;
     table.isServed = false;
@@ -111,9 +104,7 @@ playState.prototype.addNewPatron = function() {
         alpha: 1.0
       }, 1000, Phaser.Easing.Sinusoidal.InOut, true, 500);
     this.game.add.tween(emptyTable.patienceFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
-    this.game.add.tween(emptyTable.patienceIcon).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(emptyTable.eatingFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
-    this.game.add.tween(emptyTable.eatingIcon).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
 
     console.log("Adding new patron: "+emptyTable.patronName+" at table "+emptyTable.id);
     console.log("Next patron at: "+this.nextPatronEntrance);
@@ -137,9 +128,7 @@ playState.prototype.feedTable = function(table) {
 
     // crossfade in
     this.game.add.tween(table.patienceFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
-    this.game.add.tween(table.patienceIcon).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(table.eatingFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
-    this.game.add.tween(table.eatingIcon).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
   }
 };
 

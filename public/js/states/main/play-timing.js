@@ -18,13 +18,15 @@ playState.prototype.setupTimingIndicators = function() {
 };
 
 playState.prototype.updateTimers = function() {
-  var timeMs = '' + Math.max(0.0, (this.timeLimit - (this.game.time.now - this.startTime)) / 1000);
-  var i = timeMs.indexOf('.');
-  if (i === -1) {
-    timeMs += '.0';
-  } else {
-    timeMs = timeMs.slice(0, i + 2);
-  }
+  // var timeMs = '' + Math.max(0.0, (this.timeLimit - (this.game.time.now - this.startTime)) / 1000);
+  // var i = timeMs.indexOf('.');
+  // if (i === -1) {
+  //   timeMs += '.0';
+  // } else {
+  //   timeMs = timeMs.slice(0, i + 2);
+  // }
+  // this.timeLabel.text = timeMs;
+  var timeMs = Math.max(0, Math.floor((this.timeLimit - (this.game.time.now - this.startTime)) / 1000));
   this.timeLabel.text = timeMs;
 };
 
@@ -36,5 +38,5 @@ playState.prototype.checkEndCondition = function() {
 
 playState.prototype.getNewPatronEntranceTime = function() {
   //TODO: change depending on level progress / level number
-  return (Math.random() * 3000) + 5000 + this.game.time.now; //5-8s
+  return (Math.random() * 2000) + (3000) + this.game.time.now; //3-5s
 };

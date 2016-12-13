@@ -5,7 +5,7 @@ var MIN_VOLUME = 0.001;
 var HALF_PI = Math.PI / 2;
 var DEG_TO_RAD = Math.PI / 180;
 
-var PLAYER_SPEED = 300;
+var PLAYER_SPEED = 400;
 var PLAYER_BODY = {
   x: 62,
   y: 107,
@@ -21,43 +21,43 @@ var TABLE_BODY = {
 };
 var TABLE_ANCHOR = {
   x: 0.5,
-  y: 0.2
+  y: 0.48
 };
 
 var INTERACTION_TETHER_DISTANCE = 15;
 
-var PATIENCE_DRAIN_MULTIPLIER = 0.002;
-var EATING_SPEED_MULTIPLIER = 0.002;
+var PATIENCE_DRAIN_MULTIPLIER = 0.004;
+var EATING_SPEED_MULTIPLIER = 0.004;
 
 var CASH_INDICATOR_LIFESPAN = 600;
 
 var PATRONS = [
   {
-    name: 'Young Family',
-    sprite: 'patron-a',
-    patienceDrainSpeed: 26,
-    eatingSpeed: 60,
-    billAmount: 25
-  },
-  {
     name: 'Old Couple',
+    sprite: 'patron-a',
+    patienceDrainSpeed: 25,
+    eatingSpeed: 50,
+    billAmount: 25
+  },
+  {
+    name: 'Young Family',
     sprite: 'patron-b',
-    patienceDrainSpeed: 18,
-    eatingSpeed: 60,
-    billAmount: 25
+    patienceDrainSpeed: 30,
+    eatingSpeed: 75,
+    billAmount: 20
   },
   {
-    name: 'Let Me See the Manager Lady',
+    name: 'Corporate Lunch',
     sprite: 'patron-c',
-    patienceDrainSpeed: 32,
+    patienceDrainSpeed: 40,
     eatingSpeed: 60,
-    billAmount: 25
+    billAmount: 30
   },
   {
-    name: 'Smelly Guy',
+    name: 'Latin Couple',
     sprite: 'patron-d',
-    patienceDrainSpeed: 21,
-    eatingSpeed: 60,
-    billAmount: 25
+    patienceDrainSpeed: 15,
+    eatingSpeed: 40,
+    billAmount: 45
   }
 ];

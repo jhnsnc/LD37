@@ -82,10 +82,10 @@ var playState = function(game) {};
       this.introCover.endFill();
       this.introCover.alpha = 1.0;
 
-      this.timeLimit = (100 + 20 * this.game.level) * 1000;
-      if (urlParams.timeLimit && !isNaN(urlParams.timeLimit)) {
-        this.timeLimit = parseInt(urlParams.timeLimit, 10);
-      }
+      this.timeLimit = (80 + 12 * this.game.level) * 1000;
+      // if (urlParams.timeLimit && !isNaN(urlParams.timeLimit)) {
+      //   this.timeLimit = parseInt(urlParams.timeLimit, 10);
+      // }
 
       // fullscreen toggle
       createFullscreenToggle(this);
@@ -106,21 +106,21 @@ var playState = function(game) {};
         var playerMoved = false;
         this.player.body.velocity.y = 0;
         if (this.cursors.up.isDown) {
-          this.player.body.velocity.y = -1 * PLAYER_SPEED;
+          this.player.body.velocity.y = -1 * this.waiterSpeed;
           playerMoved = true;
           newDirection = 'up';
         } else if (this.cursors.down.isDown) {
-          this.player.body.velocity.y = PLAYER_SPEED;
+          this.player.body.velocity.y = this.waiterSpeed;
           playerMoved = true;
           newDirection = 'down';
         }
         this.player.body.velocity.x = 0;
         if (this.cursors.left.isDown) {
-          this.player.body.velocity.x = -1 * PLAYER_SPEED;
+          this.player.body.velocity.x = -1 * this.waiterSpeed;
           playerMoved = true;
           newDirection = 'left';
         } else if (this.cursors.right.isDown) {
-          this.player.body.velocity.x = PLAYER_SPEED;
+          this.player.body.velocity.x = this.waiterSpeed;
           playerMoved = true;
           newDirection = 'right';
         }
@@ -208,6 +208,9 @@ var playState = function(game) {};
     this.game.score = this.cashEarned;
     this.game.goal = this.pointsTarget;
     this.game.levelWasSuccess = this.cashEarned >= this.pointsTarget;
+
+    this.player.body.velocity.x = 0;
+    this.player.body.velocity.y = 0;
 
     var self = this;
     var gfxCover;

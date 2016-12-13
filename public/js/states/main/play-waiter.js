@@ -17,6 +17,8 @@ playState.prototype.setupPlayer = function(target) {
   this.waiterHasFood = false;
   this.waiterHasTrash = false;
   this.player.animations.play('down-empty');
+
+  this.waiterSpeed = PLAYER_SPEED + (this.game.level * 25);
 };
 
 playState.prototype.updatePlayerDirection = function(newDirection) {

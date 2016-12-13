@@ -57,8 +57,6 @@ var preloadState = function(game) {};
       // ui elements
       game.load.image("dummy", "assets/ui/transparent.png");
       game.load.image("ui-FullscreenToggle", "assets/ui/ui-fullscreen-toggle.png");
-      game.load.image("ui-patience-indicator", "assets/ui/indicator-patience.png");
-      game.load.image("ui-hunger-indicator", "assets/ui/indicator-hunger.png");
       game.load.image("ui-interaction-prompt", "assets/ui/interaction-prompt.png");
       game.load.image("cash-icon", "assets/ui/cash-icon.png");
       game.load.image("tray-icon", "assets/ui/tray-icon.png");
