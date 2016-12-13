@@ -4,7 +4,7 @@ var playState = function(game) {};
 
   playState.prototype = {
     create: function() {
-      console.log("Starting Level Play");
+      // console.log("Starting Level Play");
 
       this.isCompleting = false;
 
@@ -168,21 +168,21 @@ var playState = function(game) {};
       }
     },
     render: function() {
-      if (urlParams.debug === 'true') {
-        this.game.debug.body(this.player);
-        this.tables.forEach((function(table) {
-          this.game.debug.body(table);
-        }).bind(this));
-        this.obstacleList.forEach((function(obstacle) {
-          this.game.debug.body(obstacle);
-        }).bind(this));
-        this.game.debug.body(this.counter);
-      }
+      // if (urlParams.debug === 'true') {
+      //   this.game.debug.body(this.player);
+      //   this.tables.forEach((function(table) {
+      //     this.game.debug.body(table);
+      //   }).bind(this));
+      //   this.obstacleList.forEach((function(obstacle) {
+      //     this.game.debug.body(obstacle);
+      //   }).bind(this));
+      //   this.game.debug.body(this.counter);
+      // }
     }
   };
 
   playState.prototype.startLevel = function() {
-    console.log("ALL READY -- START LEVEL!");
+    // console.log("ALL READY -- START LEVEL!");
 
     // reveal content
     this.game.add.tween(this.introCover)
@@ -201,7 +201,7 @@ var playState = function(game) {};
   };
 
   playState.prototype.completeLevel = function() {
-    console.log('Boom! Done. Finishing level');
+    // console.log('Boom! Done. Finishing level');
 
     this.isCompleting = true;
     this.game.timeLimit = Math.floor(this.timeLimit / 1000);

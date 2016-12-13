@@ -106,16 +106,16 @@ playState.prototype.addNewPatron = function() {
     this.game.add.tween(emptyTable.patienceFill).to({ alpha: 1.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
     this.game.add.tween(emptyTable.eatingFill).to({ alpha: 0.0 }, 500, Phaser.Easing.Sinusoidal.InOut, true);
 
-    console.log("Adding new patron: "+emptyTable.patronName+" at table "+emptyTable.id);
-    console.log("Next patron at: "+this.nextPatronEntrance);
+    // console.log("Adding new patron: "+emptyTable.patronName+" at table "+emptyTable.id);
+    // console.log("Next patron at: "+this.nextPatronEntrance);
   } else {
-    console.log("No empty tables. Trying again at: "+this.nextPatronEntrance);
+    // console.log("No empty tables. Trying again at: "+this.nextPatronEntrance);
   }
 };
 
 playState.prototype.feedTable = function(table) {
   if (table.isOccupied && !table.isServed && this.waiterHasFood) {
-    console.log("Feeding patron at table "+table.id+".");
+    // console.log("Feeding patron at table "+table.id+".");
 
     this.waiterHasFood = false;
     this.updatePlayerDirection();
@@ -134,7 +134,7 @@ playState.prototype.feedTable = function(table) {
 
 playState.prototype.clearTable = function(table) {
   if (!table.isOccupied && !table.isClear && !this.waiterHasFood && !this.waiterHasTrash) {
-    console.log("Clearing trash from table "+table.id+".");
+    // console.log("Clearing trash from table "+table.id+".");
 
     this.waiterHasTrash = true;
     this.updatePlayerDirection();
@@ -146,7 +146,7 @@ playState.prototype.clearTable = function(table) {
 };
 
 playState.prototype.vacateTable = function(table, leavingHappy) {
-  console.log("Patron ("+table.patronName+") leaving table "+table.id+" "+(leavingHappy?"happy and satisfied":"in frustration")+".");
+  // console.log("Patron ("+table.patronName+") leaving table "+table.id+" "+(leavingHappy?"happy and satisfied":"in frustration")+".");
 
   // crossfade in
   this.game.add.tween(table.patronSprite)
