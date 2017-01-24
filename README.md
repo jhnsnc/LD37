@@ -15,4 +15,14 @@ Here's the Ludum Dare entry page: http://ludumdare.com/compo/ludum-dare-37/?acti
 
 # Results
 
-TODO: Get rated. Add results here
+Here's how I was rated out of 1489 jam entries (2390 entries overall)
+
+| Rank   | Category   | Score | Percentile |
+| ------ | ---------- | ----- | ---------- |
+| bronze | Coolness   | 50%   | -          |
+| #194   | Fun        | 3.58  | 86%        |
+| #202   | Audio      | 3.54  | 86%        |
+| #302   | Graphics   | 3.83  | 79%        |
+| #339   | Overall    | 3.50  | 77%        |
+| #349   | Mood       | 3.45  | 76%        |
+| #489   | Theme      | 3.50  | 67%        |
